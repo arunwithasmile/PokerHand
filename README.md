@@ -1,5 +1,4 @@
 # Poker Hand
-***
 
 ## Assumptions
 1. There will be at least one line (deal) in the file.
