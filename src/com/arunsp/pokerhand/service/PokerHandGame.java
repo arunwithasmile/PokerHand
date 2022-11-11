@@ -54,7 +54,6 @@ public class PokerHandGame {
 
 	private Player playDeal(String deal) throws InvalidDealException, InvalidCardException {
 		// Here we will break the string into two hands for player A and B.
-		System.out.print(deal);
 		String[] cards = getCards(deal);
 		String[] playerACards = Arrays.copyOfRange(cards, 0, 5);
 		String[] playerBCards = Arrays.copyOfRange(cards, 5, 10);
@@ -76,7 +75,6 @@ public class PokerHandGame {
 			winner = highCardValidator.breakTie(playerACards, playerBCards);
 		}
 
-		System.out.println(" - " + winner);
 		return winner;
 	}
 
@@ -91,12 +89,8 @@ public class PokerHandGame {
 			// If found a valid hand, we will break the loop and consider the returned rank
 			// to check winner
 			if (rank > 0) {
-				System.out.print(" - " + validator.getClass().getSimpleName());
 				break;
 			}
-		}
-		if (rank == 0) {
-			System.out.print(" - High Card");
 		}
 		return rank;
 	}

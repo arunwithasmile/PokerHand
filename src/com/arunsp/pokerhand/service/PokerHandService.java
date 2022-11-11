@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arunsp.pokerhand.mod.PlayResult;
-import com.arunsp.pokerhand.service.InvalidDataException;
-import com.arunsp.pokerhand.service.PokerHandGame;
 
 /**
  * This service handles all the file parsing tasks and delegates the deals to
