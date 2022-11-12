@@ -6,9 +6,11 @@ package com.arunsp.pokerhand;
 import java.io.FileNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import com.arunsp.pokerhand.mod.PlayResult;
 import com.arunsp.pokerhand.service.InvalidDataException;
@@ -28,7 +30,10 @@ public class PokerHandApplication implements CommandLineRunner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(PokerHandApplication.class, args);
+		SpringApplicationBuilder builder = new SpringApplicationBuilder(PokerHandApplication.class);
+		SpringApplication app = builder.logStartupInfo(false).build();
+		app.setBannerMode(Banner.Mode.OFF);
+		app.run(args);
 	}
 
 	@Override
