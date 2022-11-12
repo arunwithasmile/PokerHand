@@ -4,7 +4,7 @@
 package com.arunsp.pokerhand.validator;
 
 import static com.arunsp.pokerhand.util.Constants.INVALID_HAND_RANK;
-import static com.arunsp.pokerhand.validator.HandValidator.areSameSuit;
+import static com.arunsp.pokerhand.validator.HandValidator.areAdjacent;
 import static com.arunsp.pokerhand.validator.HandValidator.assertValidDeal;
 
 import org.springframework.core.annotation.Order;
@@ -31,6 +31,6 @@ public class StraightValidator implements HandValidator {
 	@Override
 	public int validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
-		return areSameSuit(deal) ? RANK : INVALID_HAND_RANK;
+		return areAdjacent(deal) ? RANK : INVALID_HAND_RANK;
 	}
 }
