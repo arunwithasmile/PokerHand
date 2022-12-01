@@ -15,30 +15,6 @@ public class PlayResult {
 	private long playerBCount;
 	private long drawCount;
 
-	public long getPlayerACount() {
-		return playerACount;
-	}
-
-	public void setPlayerACount(long playerACount) {
-		this.playerACount = playerACount;
-	}
-
-	public long getPlayerBCount() {
-		return playerBCount;
-	}
-
-	public void setPlayerBCount(long playerBCount) {
-		this.playerBCount = playerBCount;
-	}
-
-	public long getDrawCount() {
-		return drawCount;
-	}
-
-	public void setDrawCount(long drawCount) {
-		this.drawCount = drawCount;
-	}
-
 	public void updateResult(Player winner) {
 		if (winner == Player.PLAYER_A) {
 			playerACount++;

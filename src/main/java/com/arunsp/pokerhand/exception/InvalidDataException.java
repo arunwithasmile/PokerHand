@@ -1,4 +1,4 @@
-package com.arunsp.pokerhand.service;
+package com.arunsp.pokerhand.exception;
 
 public class InvalidDataException extends Exception {
 

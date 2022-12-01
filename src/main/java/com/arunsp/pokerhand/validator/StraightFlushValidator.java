@@ -3,10 +3,10 @@
  */
 package com.arunsp.pokerhand.validator;
 
+import static com.arunsp.pokerhand.util.CardsUtil.areAdjacent;
+import static com.arunsp.pokerhand.util.CardsUtil.areSameSuit;
+import static com.arunsp.pokerhand.util.CardsUtil.assertValidDeal;
 import static com.arunsp.pokerhand.util.Constants.INVALID_HAND_RANK;
-import static com.arunsp.pokerhand.validator.HandValidator.areAdjacent;
-import static com.arunsp.pokerhand.validator.HandValidator.areSameSuit;
-import static com.arunsp.pokerhand.validator.HandValidator.assertValidDeal;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

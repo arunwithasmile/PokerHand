@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
+import com.arunsp.pokerhand.exception.InvalidDataException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
 import com.arunsp.pokerhand.mod.PlayResult;
 import com.arunsp.pokerhand.util.Player;
@@ -25,11 +26,15 @@ import com.arunsp.pokerhand.validator.HighCardValidator;
 @Service
 public class PokerHandGame {
 
-	@Autowired
-	private List<HandValidator> validators;
+	private final List<HandValidator> validators;
+
+	private final HighCardValidator highCardValidator;
 
 	@Autowired
-	private HighCardValidator highCardValidator;
+	public PokerHandGame(List<HandValidator> validators, HighCardValidator highCardValidator) {
+		this.validators = validators;
+		this.highCardValidator = highCardValidator;
+	}
 
 	public PlayResult play(List<String> deals) throws InvalidDataException {
 		PlayResult result = new PlayResult();
@@ -96,15 +101,11 @@ public class PokerHandGame {
 	}
 
 	private String[] getCards(String deal) throws InvalidDealException {
-		try {
-			String[] cards = deal.split(SPACE);
-			if (cards.length != 10) {
-				throw new InvalidDealException(
-						"Deal string '" + deal + "' is invalid. A Deal should contain 10 cards. Found " + cards.length);
-			}
-			return cards;
-		} catch (Exception e) {
-			throw e;
+		String[] cards = deal.split(SPACE);
+		if (cards.length != 10) {
+			throw new InvalidDealException(
+					"Deal string '" + deal + "' is invalid. A Deal should contain 10 cards. Found " + cards.length);
 		}
+		return cards;
 	}
 }

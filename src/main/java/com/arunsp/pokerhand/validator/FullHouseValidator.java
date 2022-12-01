@@ -3,9 +3,9 @@
  */
 package com.arunsp.pokerhand.validator;
 
+import static com.arunsp.pokerhand.util.CardsUtil.assertValidDeal;
+import static com.arunsp.pokerhand.util.CardsUtil.getCountMap;
 import static com.arunsp.pokerhand.util.Constants.INVALID_HAND_RANK;
-import static com.arunsp.pokerhand.validator.HandValidator.assertValidDeal;
-import static com.arunsp.pokerhand.validator.HandValidator.getCountMap;
 
 import java.util.Collection;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class FullHouseValidator implements HandValidator {
 	public int validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 
-		// Lets get the count of each card value.
+		// Let's get the count of each card value.
 		Map<Integer, Integer> valueCounts = getCountMap(deal);
 
 		// Now check if we have 3 & 2 occurrences

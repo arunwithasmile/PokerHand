@@ -7,12 +7,14 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arunsp.pokerhand.exception.InvalidDataException;
 import com.arunsp.pokerhand.mod.PlayResult;
 
 /**
@@ -25,26 +27,37 @@ import com.arunsp.pokerhand.mod.PlayResult;
 @Service
 public class PokerHandService {
 
-	@Autowired
-	private PokerHandGame pokerHandGame;
+	private final PokerHandGame pokerHandGame;
 
-	public PlayResult extractDealsAndPlay(String fileName)
-			throws InvalidDataException, IOException, FileNotFoundException {
-		List<String> deals = convertToLines(fileName);
+	@Autowired
+	public PokerHandService(PokerHandGame pokerHandGame) {
+		this.pokerHandGame = pokerHandGame;
+	}
+
+	public PlayResult extractDealsAndPlay() throws InvalidDataException, FileNotFoundException, IOException {
+		List<String> deals = readIntoLines(new InputStreamReader(System.in));
 		return pokerHandGame.play(deals);
 	}
 
-	private List<String> convertToLines(String fileName) throws IOException, FileNotFoundException {
-		System.out.println("Reading file: " + fileName + "\n");
+	public PlayResult extractDealsAndPlay(String fileName)
+			throws InvalidDataException, FileNotFoundException, IOException {
+		if (fileName != null) {
+			System.out.println("Reading file: " + fileName + "\n");
+		}
+		List<String> deals = readIntoLines(new FileReader(fileName));
+		return pokerHandGame.play(deals);
+	}
+
+	private List<String> readIntoLines(InputStreamReader reader) throws IOException, FileNotFoundException {
 		List<String> lines = new ArrayList<>();
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
+		try (BufferedReader bufferedReader = new BufferedReader(reader)) {
 			String line;
 			do {
 				line = bufferedReader.readLine();
-				if (line != null) {
+				if (line != null && !line.isEmpty()) {
 					lines.add(line);
 				}
-			} while (line != null);
+			} while (line != null && !line.isEmpty());
 		}
 		return lines;
 	}
