@@ -3,6 +3,7 @@
  */
 package com.arunsp.pokerhand.service;
 
+import static com.arunsp.pokerhand.util.CardsUtil.cardValue;
 import static com.arunsp.pokerhand.util.Constants.SPACE;
 
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDataException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
+import com.arunsp.pokerhand.mod.Hand;
 import com.arunsp.pokerhand.mod.PlayResult;
 import com.arunsp.pokerhand.util.Player;
 import com.arunsp.pokerhand.validator.HandValidator;
@@ -28,12 +30,9 @@ public class PokerHandGame {
 
 	private final List<HandValidator> validators;
 
-	private final HighCardValidator highCardValidator;
-
 	@Autowired
 	public PokerHandGame(List<HandValidator> validators, HighCardValidator highCardValidator) {
 		this.validators = validators;
-		this.highCardValidator = highCardValidator;
 	}
 
 	public PlayResult play(List<String> deals) throws InvalidDataException {
@@ -64,40 +63,40 @@ public class PokerHandGame {
 		String[] playerBCards = Arrays.copyOfRange(cards, 5, 10);
 
 		// Finding Rank of Player A.
-		int playerARank = playDeal(playerACards);
+		Hand playerAHand = playDeal(playerACards);
 
 		// Finding Rank of player B
-		int playerBRank = playDeal(playerBCards);
+		Hand playerBHand = playDeal(playerBCards);
 
 		// Return the winner.
 		Player winner;
 
-		if (playerARank > playerBRank) {
+		if (playerAHand.getRank() > playerBHand.getRank()) {
 			winner = Player.PLAYER_A;
-		} else if (playerBRank > playerARank) {
+		} else if (playerAHand.getRank() < playerBHand.getRank()) {
 			winner = Player.PLAYER_B;
 		} else { // Draw.
-			winner = highCardValidator.breakTie(playerACards, playerBCards);
+			winner = breakTie(playerAHand.getDeal(), playerBHand.getDeal());
 		}
 
 		return winner;
 	}
 
-	private int playDeal(String[] cards) throws InvalidCardException, InvalidDealException {
+	private Hand playDeal(String[] cards) throws InvalidCardException, InvalidDealException {
 		// We have autowired all the Hand Validators into 'validators' list. We will
 		// check for each hand starting from the highest Rank.
-		int rank = 0;
+		Hand identifiedHand = null;
 		for (HandValidator validator : validators) { // Looping through each validator.
 
-			rank = validator.validateAndRank(cards);
+			identifiedHand = validator.validateAndRank(cards);
 
 			// If found a valid hand, we will break the loop and consider the returned rank
 			// to check winner
-			if (rank > 0) {
+			if (identifiedHand != null) {
 				break;
 			}
 		}
-		return rank;
+		return identifiedHand;
 	}
 
 	private String[] getCards(String deal) throws InvalidDealException {
@@ -107,5 +106,37 @@ public class PokerHandGame {
 					"Deal string '" + deal + "' is invalid. A Deal should contain 10 cards. Found " + cards.length);
 		}
 		return cards;
+	}
+
+	/**
+	 * This will break tie between
+	 * 
+	 * @param dealA
+	 * @param dealB
+	 * @return
+	 * @throws InvalidCardException
+	 */
+	private Player breakTie(String[] dealA, String[] dealB) throws InvalidCardException {
+		if (dealA.length != dealB.length) {
+			throw new RuntimeException("Ideally both deals should have the same length for the tie breaker");
+		}
+		Player leading = null;
+		int highestCard = 0;
+		for (int i = 0; i < dealA.length; i++) {
+			int cardAValue = cardValue(dealA[i]);
+			int carBValue = cardValue(dealB[i]);
+			if (cardAValue == carBValue) {
+				continue;
+			}
+
+			if (cardAValue > highestCard) {
+				leading = Player.PLAYER_A;
+				highestCard = cardAValue;
+			} else if (carBValue > highestCard) {
+				leading = Player.PLAYER_B;
+				highestCard = carBValue;
+			}
+		}
+		return leading;
 	}
 }

@@ -5,13 +5,13 @@ package com.arunsp.pokerhand.validator;
 
 import static com.arunsp.pokerhand.util.CardsUtil.areAdjacent;
 import static com.arunsp.pokerhand.util.CardsUtil.assertValidDeal;
-import static com.arunsp.pokerhand.util.Constants.INVALID_HAND_RANK;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
+import com.arunsp.pokerhand.mod.Hand;
 
 /**
  * Checks if a deal is a Straight hand.
@@ -29,8 +29,8 @@ public class StraightValidator implements HandValidator {
 	private static final int RANK = 5;
 
 	@Override
-	public int validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
-		return areAdjacent(deal) ? RANK : INVALID_HAND_RANK;
+		return areAdjacent(deal) ? new Hand(deal, RANK) : null;
 	}
 }

@@ -6,13 +6,13 @@ package com.arunsp.pokerhand.validator;
 import static com.arunsp.pokerhand.util.CardsUtil.areSameSuit;
 import static com.arunsp.pokerhand.util.CardsUtil.assertValidDeal;
 import static com.arunsp.pokerhand.util.CardsUtil.cardValue;
-import static com.arunsp.pokerhand.util.Constants.INVALID_HAND_RANK;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
+import com.arunsp.pokerhand.mod.Hand;
 
 /**
  * Checks if a deal is a Royal Flush hand.
@@ -31,12 +31,12 @@ public class RoyalFlushValidator implements HandValidator {
 	private static final int RANK = 10;
 
 	@Override
-	public int validateAndRank(String[] deal) throws InvalidCardException, InvalidDealException {
+	public Hand validateAndRank(String[] deal) throws InvalidCardException, InvalidDealException {
 		assertValidDeal(deal);
 
 		// Verify if all of them are in the same suit
 		if (!areSameSuit(deal)) {
-			return INVALID_HAND_RANK; // Return ZERO rank.
+			return null;
 		}
 
 		// So for all the cards to be Ten, Jack, Queen, King and Ace, the total sum of
@@ -48,10 +48,10 @@ public class RoyalFlushValidator implements HandValidator {
 			totalCardValue += cardValue(card);
 		}
 
-		if (totalCardValue == 60) {
-			return RANK; // Match!
+		if (totalCardValue == 60) {// Match!
+			return new Hand(deal, RANK);
 		}
 
-		return INVALID_HAND_RANK;
+		return null;
 	}
 }

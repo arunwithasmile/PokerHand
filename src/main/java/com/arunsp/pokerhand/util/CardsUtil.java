@@ -4,9 +4,9 @@
 package com.arunsp.pokerhand.util;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
@@ -73,14 +73,21 @@ public class CardsUtil {
 		return valueCounts;
 	}
 
-	public static boolean checkOccurrences(Map<Integer, Integer> valueCounts, int requiredCount) {
-		Collection<Integer> counts = valueCounts.values();
-		for (Integer count : counts) {
-			if (count == requiredCount) {
-				return true;
+	/**
+	 * Checks for the no of occurrences in the map containing counts of each card
+	 * value.
+	 * 
+	 * @param valueCounts
+	 * @param requiredCount
+	 * @return The card value if the count matches. Null otherwise.
+	 */
+	public static Integer checkOccurrences(Map<Integer, Integer> valueCounts, int requiredCount) {
+		for (Entry<Integer, Integer> entry : valueCounts.entrySet()) {
+			if (entry.getValue() == requiredCount) {
+				return entry.getKey();
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public static void assertValidDeal(String[] deal) throws InvalidDealException {
@@ -120,5 +127,23 @@ public class CardsUtil {
 			throw new InvalidCardException("Card '" + card
 					+ "' is invalid. The first letter can only be between 2 and 9 (inclusive) or one of { T, J, Q, K, A }");
 		}
+	}
+
+	/**
+	 * This will return all the cards that are of a given card value. i.e. it will
+	 * return all the cards that start with a given card number.
+	 * 
+	 * @param deal  Array of cards.
+	 * @param match Card value to match.
+	 * @return An array of cards that matched the card value.
+	 */
+	public static String[] filterCardsByValue(String[] deal, Integer match) {
+		return Arrays.asList(deal).stream().filter(card -> {
+			try {
+				return cardValue(card) == match;
+			} catch (InvalidCardException e) {
+				return false;
+			}
+		}).toArray(String[]::new);
 	}
 }

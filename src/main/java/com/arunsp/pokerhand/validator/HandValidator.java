@@ -5,6 +5,7 @@ package com.arunsp.pokerhand.validator;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
+import com.arunsp.pokerhand.mod.Hand;
 
 /**
  * This interface validates if a hand is a valid hand or not. Each implementer
@@ -24,5 +25,5 @@ public interface HandValidator {
 	 * @throws InvalidCardException If any of the cards is invalid.
 	 * @throws InvalidDealException If the deal does not have 5 cards.
 	 */
-	public int validateAndRank(String[] deal) throws InvalidCardException, InvalidDealException;
+	public Hand validateAndRank(String[] deal) throws InvalidCardException, InvalidDealException;
 }

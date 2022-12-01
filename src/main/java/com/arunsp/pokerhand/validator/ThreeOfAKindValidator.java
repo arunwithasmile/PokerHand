@@ -5,8 +5,8 @@ package com.arunsp.pokerhand.validator;
 
 import static com.arunsp.pokerhand.util.CardsUtil.assertValidDeal;
 import static com.arunsp.pokerhand.util.CardsUtil.checkOccurrences;
+import static com.arunsp.pokerhand.util.CardsUtil.filterCardsByValue;
 import static com.arunsp.pokerhand.util.CardsUtil.getCountMap;
-import static com.arunsp.pokerhand.util.Constants.INVALID_HAND_RANK;
 
 import java.util.Map;
 
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
+import com.arunsp.pokerhand.mod.Hand;
 
 /**
  * Checks if a deal is a Three of a Kind hand.
@@ -32,19 +33,19 @@ public class ThreeOfAKindValidator implements HandValidator {
 	private static final int RANK = 4;
 
 	@Override
-	public int validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 
 		// Let's get the count of each card value.
 		Map<Integer, Integer> valueCounts = getCountMap(deal);
 
 		// Now check if either of them had 4 occurrences
-		boolean match = checkOccurrences(valueCounts, 3);
+		Integer match = checkOccurrences(valueCounts, 3);
 
-		if (match) {
-			return RANK;
+		if (match != null) {
+			return new Hand(filterCardsByValue(deal, match), RANK);
 		}
 
-		return INVALID_HAND_RANK;
+		return null;
 	}
 }

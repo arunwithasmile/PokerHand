@@ -25,6 +25,10 @@ public class PlayResult {
 		}
 	}
 
+	public long getPlayerBCount() {
+		return playerBCount;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder().append("Player 1: ").append(playerACount).append(" hands")

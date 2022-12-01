@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
+import com.arunsp.pokerhand.mod.Hand;
 import com.arunsp.pokerhand.util.Player;
 
 /**
@@ -23,9 +24,11 @@ import com.arunsp.pokerhand.util.Player;
 @Order(10)
 public class HighCardValidator implements HandValidator {
 
+	private static final int RANK = 1;
+
 	@Override
-	public int validateAndRank(String[] deal) throws InvalidCardException, InvalidDealException {
-		return 1;
+	public Hand validateAndRank(String[] deal) throws InvalidCardException, InvalidDealException {
+		return new Hand(deal, RANK);
 	}
 
 	public Player breakTie(String[] dealA, String[] dealB) throws InvalidCardException {
