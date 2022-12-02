@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 
 /**
  * Checks if a deal is a Two Pair hand.
@@ -29,10 +30,9 @@ import com.arunsp.pokerhand.mod.Hand;
 @Component
 @Order(8)
 public class TwoPairsValidator implements HandValidator {
-	private static final int RANK = 3;
 
 	@Override
-	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public HandResult validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 
 		// Let's get the count of each card value.
@@ -50,7 +50,7 @@ public class TwoPairsValidator implements HandValidator {
 		}
 
 		// Return RANK if we found it, or ZERO otherwise.
-		return pairsCount == 2 ? new Hand(matchedCards, RANK) : null;
+		return pairsCount == 2 ? new HandResult(matchedCards, HandType.TWO_PAIR) : null;
 	}
 
 	private String[] fillMatchedCards(String[] matchedCards, String[] pair) {

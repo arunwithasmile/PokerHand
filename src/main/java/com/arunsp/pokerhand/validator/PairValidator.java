@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 
 /**
  * @author Arun S P
@@ -24,10 +25,9 @@ import com.arunsp.pokerhand.mod.Hand;
 @Component
 @Order(9)
 public class PairValidator implements HandValidator {
-	private static final int RANK = 2;
 
 	@Override
-	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public HandResult validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 
 		// Let's get the count of each card value.
@@ -37,7 +37,7 @@ public class PairValidator implements HandValidator {
 		Integer match = checkOccurrences(valueCounts, 2);
 
 		if (match != null) {
-			return new Hand(filterCardsByValue(deal, match), RANK);
+			return new HandResult(filterCardsByValue(deal, match), HandType.PAIR);
 		}
 
 		return null;

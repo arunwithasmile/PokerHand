@@ -8,7 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 import com.arunsp.pokerhand.validator.FlushValidator;
 import com.arunsp.pokerhand.validator.FourOfAKindValidator;
 import com.arunsp.pokerhand.validator.FullHouseValidator;
@@ -41,15 +42,20 @@ public class HandValidatorTest {
 	private PairValidator pairValidator;
 
 	@Autowired
-	public HandValidatorTest(RoyalFlushValidator royalFlushValidator,
-			StraightFlushValidator straightFlushValidator,
-			FourOfAKindValidator fourOfAKindValidator,
-			FullHouseValidator fullHouseValidator,
-			FlushValidator flushValidator,
-			StraightValidator straightValidator,
-			ThreeOfAKindValidator threeOfAKindValidator,
-			TwoPairsValidator twoPairsValidator,
+	public HandValidatorTest(RoyalFlushValidator royalFlushValidator, StraightFlushValidator straightFlushValidator,
+			FourOfAKindValidator fourOfAKindValidator, FullHouseValidator fullHouseValidator,
+			FlushValidator flushValidator, StraightValidator straightValidator,
+			ThreeOfAKindValidator threeOfAKindValidator, TwoPairsValidator twoPairsValidator,
 			PairValidator pairValidator) {
+		this.royalFlushValidator = royalFlushValidator;
+		this.straightFlushValidator = straightFlushValidator;
+		this.fourOfAKindValidator = fourOfAKindValidator;
+		this.fullHouseValidator = fullHouseValidator;
+		this.flushValidator = flushValidator;
+		this.straightValidator = straightValidator;
+		this.threeOfAKindValidator = threeOfAKindValidator;
+		this.twoPairsValidator = twoPairsValidator;
+		this.pairValidator = pairValidator;
 	}
 
 	/**
@@ -61,15 +67,15 @@ public class HandValidatorTest {
 	@Test
 	public void testRoyalFlush() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TH", "KH", "AH", "QH", "JH" };
-		Hand hand = royalFlushValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = royalFlushValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.ROYAL_FLUSH);
 	}
 
 	@Test
 	public void testNotRoyalFlush() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TH", "JH", "AH", "QH", "JH" };
-		Hand hand = royalFlushValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = royalFlushValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -81,15 +87,15 @@ public class HandValidatorTest {
 	@Test
 	public void testStraightFlush() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TS", "9S", "JS", "8S", "7S" };
-		Hand hand = straightFlushValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = straightFlushValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.STRAIGHT_FLUSH);
 	}
 
 	@Test
 	public void testNotStraightFlush() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TS", "9S", "JH", "8S", "7H" };
-		Hand hand = straightFlushValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = straightFlushValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -101,15 +107,15 @@ public class HandValidatorTest {
 	@Test
 	public void testFourOfAKind() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "6S", "6C", "6S", "5S", "6D" };
-		Hand hand = fourOfAKindValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = fourOfAKindValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.FOUR_OF_A_KIND);
 	}
 
 	@Test
 	public void testNotFourOfAKind() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TS", "9S", "JH", "8S", "7H" };
-		Hand hand = fourOfAKindValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = fourOfAKindValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -121,15 +127,15 @@ public class HandValidatorTest {
 	@Test
 	public void testFullHouse() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "5C", "6S", "6D", "5S", "6H" };
-		Hand hand = fullHouseValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = fullHouseValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.FULL_HOUSE);
 	}
 
 	@Test
 	public void testNotFullHouse() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TS", "9S", "JH", "8S", "7H" };
-		Hand hand = fullHouseValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = fullHouseValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -141,15 +147,15 @@ public class HandValidatorTest {
 	@Test
 	public void testFlush() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TS", "9S", "JS", "8S", "7S" };
-		Hand hand = flushValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = flushValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.FLUSH);
 	}
 
 	@Test
 	public void testNotFlush() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TS", "9S", "JH", "8S", "7H" };
-		Hand hand = flushValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = flushValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -161,15 +167,15 @@ public class HandValidatorTest {
 	@Test
 	public void testStraight() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "TH", "9D", "JS", "8C", "7S" };
-		Hand hand = straightValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = straightValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.STRAIGHT);
 	}
 
 	@Test
 	public void testNotStraight() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "2S", "9S", "JH", "8S", "7H" };
-		Hand hand = straightValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = straightValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -181,15 +187,15 @@ public class HandValidatorTest {
 	@Test
 	public void testThreeOfAKind() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "9H", "9D", "JS", "8C", "9S" };
-		Hand hand = threeOfAKindValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = threeOfAKindValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.THREE_OF_A_KIND);
 	}
 
 	@Test
 	public void testNotThreeOfAKind() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "2S", "9S", "JH", "8S", "7H" };
-		Hand hand = threeOfAKindValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = threeOfAKindValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -201,15 +207,15 @@ public class HandValidatorTest {
 	@Test
 	public void testTwoPair() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "9H", "9D", "JS", "8C", "JS" };
-		Hand hand = twoPairsValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = twoPairsValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.TWO_PAIR);
 	}
 
 	@Test
 	public void testNotTwoPair() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "2S", "9S", "JH", "8S", "7H" };
-		Hand hand = twoPairsValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = twoPairsValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 
 	/**
@@ -221,14 +227,14 @@ public class HandValidatorTest {
 	@Test
 	public void testPair() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "9H", "9D", "KS", "8C", "JS" };
-		Hand hand = pairValidator.validateAndRank(deal);
-		assertThat(hand).isNotNull();
+		HandResult res = pairValidator.validateAndRank(deal);
+		assertThat(res.getHand()).isEqualTo(HandType.PAIR);
 	}
 
 	@Test
 	public void testNotPair() throws InvalidCardException, InvalidDealException {
 		String[] deal = { "2S", "9S", "JH", "8S", "7H" };
-		Hand hand = pairValidator.validateAndRank(deal);
-		assertThat(hand).isNull();
+		HandResult res = pairValidator.validateAndRank(deal);
+		assertThat(res).isNull();
 	}
 }

@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 
 /**
  * Checks if a deal is a Flush hand.
@@ -26,13 +27,11 @@ import com.arunsp.pokerhand.mod.Hand;
 @Order(5)
 public class FlushValidator implements HandValidator {
 
-	private static final int RANK = 6;
-
 	@Override
-	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public HandResult validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 		if (areSameSuit(deal)) {
-			return new Hand(deal, RANK);
+			return new HandResult(deal, HandType.FLUSH);
 		}
 		return null;
 	}

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDataException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
 import com.arunsp.pokerhand.mod.PlayResult;
 import com.arunsp.pokerhand.util.Player;
 import com.arunsp.pokerhand.validator.HandValidator;
@@ -63,17 +63,17 @@ public class PokerHandGame {
 		String[] playerBCards = Arrays.copyOfRange(cards, 5, 10);
 
 		// Finding Rank of Player A.
-		Hand playerAHand = playDeal(playerACards);
+		HandResult playerAHand = playDeal(playerACards);
 
 		// Finding Rank of player B
-		Hand playerBHand = playDeal(playerBCards);
+		HandResult playerBHand = playDeal(playerBCards);
 
 		// Return the winner.
 		Player winner;
 
-		if (playerAHand.getRank() > playerBHand.getRank()) {
+		if (playerAHand.getHand().getRank() > playerBHand.getHand().getRank()) {
 			winner = Player.PLAYER_A;
-		} else if (playerAHand.getRank() < playerBHand.getRank()) {
+		} else if (playerAHand.getHand().getRank() < playerBHand.getHand().getRank()) {
 			winner = Player.PLAYER_B;
 		} else { // Draw.
 			winner = breakTie(playerAHand.getDeal(), playerBHand.getDeal());
@@ -82,10 +82,10 @@ public class PokerHandGame {
 		return winner;
 	}
 
-	private Hand playDeal(String[] cards) throws InvalidCardException, InvalidDealException {
+	private HandResult playDeal(String[] cards) throws InvalidCardException, InvalidDealException {
 		// We have autowired all the Hand Validators into 'validators' list. We will
 		// check for each hand starting from the highest Rank.
-		Hand identifiedHand = null;
+		HandResult identifiedHand = null;
 		for (HandValidator validator : validators) { // Looping through each validator.
 
 			identifiedHand = validator.validateAndRank(cards);

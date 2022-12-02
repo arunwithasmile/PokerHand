@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 
 /**
  * Checks if a deal is a Four of a Kind hand.
@@ -30,10 +31,8 @@ import com.arunsp.pokerhand.mod.Hand;
 @Order(3)
 public class FourOfAKindValidator implements HandValidator {
 
-	private static final int RANK = 8;
-
 	@Override
-	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public HandResult validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 
 		// Let's get the count of each card value.
@@ -44,7 +43,7 @@ public class FourOfAKindValidator implements HandValidator {
 
 		if (match != null) {
 			String[] matchedCards = filterCardsByValue(deal, match);
-			return new Hand(matchedCards, RANK);
+			return new HandResult(matchedCards, HandType.FOUR_OF_A_KIND);
 		}
 
 		return null;

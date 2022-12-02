@@ -15,49 +15,35 @@ import com.arunsp.pokerhand.mod.PlayResult;
 import com.arunsp.pokerhand.service.PokerHandGame;
 
 /**
- * Testing Tie Breaking scenarios.
+ * Testing different scenarios of winners.
  * 
  * @author Arun S P
  *
  */
 @SpringBootTest
-public class TieBreakerTest {
+public class WinnerTest {
 
 	private final PokerHandGame pokerHandGame;
 
 	@Autowired
-	public TieBreakerTest(PokerHandGame pokerHandGame) {
+	public WinnerTest(PokerHandGame pokerHandGame) {
 		this.pokerHandGame = pokerHandGame;
 	}
 
 	@Test
-	public void testTieBreak() {
-		String deal = "AS TC 8C 3H 3C AD 5H 8D 5C 2H";
+	public void testPairWinner() {
+		String deal = "8S TH 3C 2H 3S 7H KS QH 3H 6C";
 		try {
 			PlayResult result = pokerHandGame.play(Arrays.asList(deal));
-			Assertions.assertThat(result.getPlayerBCount()).isNotZero();
+			Assertions.assertThat(result.getPlayerACount()).isNotZero();
 		} catch (InvalidDataException e) {
 			Assertions.fail(e.getMessage());
 		}
 	}
 
 	@Test
-	public void testDraw() {
-		String deal = "2H AS TD 2D 6C 2C 2S TC 9H 5D";
-		try {
-			PlayResult result = pokerHandGame.play(Arrays.asList(deal));
-			Assertions.assertThat(result.getDrawCount()).isNotZero();
-		} catch (InvalidDataException e) {
-			Assertions.fail(e.getMessage());
-		}
-	}
-
-	/**
-	 * Both are Straight Flushes but player 2 is the winner in tie break.
-	 */
-	@Test
-	public void testStraightFlushDraw() {
-		String deal = "9H TH 8H 7H JH KD QD JD TD AD";
+	public void testRoyalWinner() {
+		String deal = "8S TH 3C 2H 3S TH KH QH AH JH";
 		try {
 			PlayResult result = pokerHandGame.play(Arrays.asList(deal));
 			Assertions.assertThat(result.getPlayerBCount()).isNotZero();

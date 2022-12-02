@@ -7,22 +7,22 @@ package com.arunsp.pokerhand.mod;
  * @author Arun S P
  *
  */
-public class Hand {
+public class HandResult {
 
 	private String[] deal;
-	private int rank;
+	private HandType hand;
 
-	public Hand(String[] deal, int rank) {
+	public HandResult(String[] deal, HandType hand) {
 		super();
 		this.deal = deal;
-		this.rank = rank;
+		this.hand = hand;
 	}
 
 	public String[] getDeal() {
 		return deal;
 	}
 
-	public int getRank() {
-		return rank;
+	public HandType getHand() {
+		return hand;
 	}
 }

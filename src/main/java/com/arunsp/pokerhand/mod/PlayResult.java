@@ -25,8 +25,16 @@ public class PlayResult {
 		}
 	}
 
+	public long getPlayerACount() {
+		return playerACount;
+	}
+
 	public long getPlayerBCount() {
 		return playerBCount;
+	}
+
+	public long getDrawCount() {
+		return drawCount;
 	}
 
 	@Override

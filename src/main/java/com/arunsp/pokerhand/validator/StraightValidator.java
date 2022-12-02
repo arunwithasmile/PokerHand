@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 
 /**
  * Checks if a deal is a Straight hand.
@@ -26,11 +27,9 @@ import com.arunsp.pokerhand.mod.Hand;
 @Order(6)
 public class StraightValidator implements HandValidator {
 
-	private static final int RANK = 5;
-
 	@Override
-	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public HandResult validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
-		return areAdjacent(deal) ? new Hand(deal, RANK) : null;
+		return areAdjacent(deal) ? new HandResult(deal, HandType.STRAIGHT) : null;
 	}
 }

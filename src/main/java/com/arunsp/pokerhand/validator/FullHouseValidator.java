@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 
 import com.arunsp.pokerhand.exception.InvalidCardException;
 import com.arunsp.pokerhand.exception.InvalidDealException;
-import com.arunsp.pokerhand.mod.Hand;
+import com.arunsp.pokerhand.mod.HandResult;
+import com.arunsp.pokerhand.mod.HandType;
 
 /**
  * Checks if a deal is a Full House hand.
@@ -29,10 +30,8 @@ import com.arunsp.pokerhand.mod.Hand;
 @Order(4)
 public class FullHouseValidator implements HandValidator {
 
-	private static final int RANK = 7;
-
 	@Override
-	public Hand validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
+	public HandResult validateAndRank(String[] deal) throws InvalidDealException, InvalidCardException {
 		assertValidDeal(deal);
 
 		// Let's get the count of each card value.
@@ -50,6 +49,6 @@ public class FullHouseValidator implements HandValidator {
 			}
 		}
 
-		return tripletMatch && pairMatch ? new Hand(deal, RANK) : null;
+		return tripletMatch && pairMatch ? new HandResult(deal, HandType.FULL_HOUSE) : null;
 	}
 }
